@@ -13,6 +13,8 @@ export class AuthService {
         hash: dto.password
       }
     });
+    newUser.hash = null;
+    return { message: "New user created", user: newUser };
   };
 
   signinLocal() {};
