@@ -9,8 +9,7 @@ export class AuthController {
 
   @Post('/local/signup')
   async signupLocal(@Body() dto: AuthDto): Promise<Tokens> {
-    await this.authService.signupLocal(dto);
-    return;
+    return await this.authService.signupLocal(dto);
   };
 
   @Post('local/signin')
