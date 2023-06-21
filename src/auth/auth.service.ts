@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dtos';
 import * as bcrypt from 'bcrypt';
+import { Tokens } from './types';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,7 @@ export class AuthService {
     return bcrypt.hash(password, 10);
   }
 
-  async signupLocal(dto: AuthDto) {
+  async signupLocal(dto: AuthDto): Promise<Tokens> {
     const hash = await this.hashPassword(dto.password);
 
     const newUser = this.prisma.user.create({
@@ -20,8 +21,8 @@ export class AuthService {
         hash: hash
       },
     });
-    (await newUser).hash = undefined;
-    return newUser;
+
+    
   };
 
   signinLocal() {
