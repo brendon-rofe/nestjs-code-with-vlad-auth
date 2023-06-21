@@ -1,26 +1,27 @@
 import { Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-
+  constructor(private authService: AuthService) {};
   
   @Post('local/signup')
   signupLocal() {
-    return { message: 'signup' }
+    return this.authService.signinLocal();
   };
 
   @Post('local/signin')
   signinLocal() {
-    return { message: 'signin' }
+    return this.authService.signinLocal();
   };
 
   @Post('logout')
   logout() {
-    return { message: 'logout' }
+    return this.authService.logout();
   };
 
   @Post('refresh')
   refreshTokens() {
-    return { message: 'refresh' }
+    return this.authService.refreshTokens();
   };
 };
