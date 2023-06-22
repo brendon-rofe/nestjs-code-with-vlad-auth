@@ -7,6 +7,7 @@ import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators'
 
 @Controller('auth')
 export class AuthController {
+
   constructor(private authService: AuthService) {};
   
   @Public()
@@ -30,6 +31,7 @@ export class AuthController {
     return this.authService.logout(userId);
   };
 
+  @Public()
   @UseGuards(RtGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
@@ -39,4 +41,5 @@ export class AuthController {
   ) {
     return this.authService.refreshTokens(userId, refreshToken);
   };
+  
 };
