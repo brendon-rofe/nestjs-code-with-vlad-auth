@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {};
 
-  hashPassword(password: string) {
+  hashData(password: string) {
     return bcrypt.hash(password, 10);
   }
 
@@ -38,7 +38,7 @@ export class AuthService {
   };
 
   async signupLocal(dto: AuthDto): Promise<Tokens> {
-    const hash = await this.hashPassword(dto.password);
+    const hash = await this.hashData(dto.password);
 
     const newUser = await this.prisma.user.create({
       data: {
@@ -48,7 +48,21 @@ export class AuthService {
     });
 
     const tokens = await this.getTokens(newUser.id, newUser.email);
+    await this.updateRtHash(newUser.id, tokens.refresh_token);
     return tokens;
+  };
+
+  async updateRtHash(userId: number, rt: string) {
+    const hash = await this.hashData(rt);
+
+    await this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        hashedRt: hash,
+      }
+    })
   };
 
   signinLocal() {
